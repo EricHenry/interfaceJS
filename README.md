@@ -1,2 +1,4 @@
-# secure-snap
-A fully end-to-end encrypted clone of snap chat
+# interfaceJS 
+
+### Purpose?
+Give Developers an easy lightweight api to create, implement, and compose interfaces.
