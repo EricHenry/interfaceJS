@@ -1,54 +1,15 @@
-function create(id, props) {
- function implement(obj) {
-    let newObj = {};
-    let proto = {};
-    let keys = Object.keys(obj);
-
-    keys.forEach((key) => { 
-      if (!props[key]) {
-        throw new Error(`${key} is not defined in the interface`);
-      }
-      if (props[key] !== typeof obj[key]) {
-        throw new Error(`property ${key} is the wrong type.`);
-      }
-      
-      if (props[key] === 'function') {
-        proto[key] = obj[key];
-        return;
-      }
-      
-      newObj[key] = obj[key];
-    });
-
-    Object
-        .keys(props)
-        .forEach(key => {
-            let propertyIsDefined = keys.indexOf(key) >= 0;
-
-            if (propertyIsDefined) { 
-                return; 
-            }
-
-            throw new Error(`${key} needs to be defined to implement this interface`);
-        });
-
-    var toReturn = Object.assign(Object.create(proto), newObj);
-    return toReturn;
-  }
-
-  return {
-      id,
-      props,
-      implement, 
-  }
-}
-
-const Interface = {create};
+import Interface from './src/index.js';
 
 let personInterface = Interface.create('person', {
   name: 'string',
   age: 'number',
   greet: 'function',
+});
+
+//invalid interface
+let dogInterface = Interface.create('dog', {
+    breed: 'nunber', //invalid type
+    bark: 'functions',
 });
 
 //successfully implement an interface
