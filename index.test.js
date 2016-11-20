@@ -1,18 +1,39 @@
-import Interface from './src/index.js';
+const Interface = require('./src/index.js');
+
+describe('Creating a new interface', () => {
+    it('creates an interface with valid allowed types', () => {
+        let {id, props, implement} = Interface.create('person', {
+            name: 'string',
+            age: 'number',
+            greet: 'function',
+        }); 
+
+        expect(id).toBe('person');
+        expect(props).toEqual({
+            name: 'string',
+            age: 'number',
+            greet: 'function',
+        });
+        expect(typeof implement).toBe('function');
+    });
+
+    it('cannot create interface with unknown types', () => {
+        expect(() => (
+            Interface.create('dog', {
+                breed: 'nunber', //invalid type
+                bark: 'functions',
+            })
+        ))
+        .toThrow();
+    });
+});
 
 let personInterface = Interface.create('person', {
-  name: 'string',
-  age: 'number',
-  greet: 'function',
-});
-
-//invalid interface
-let dogInterface = Interface.create('dog', {
-    breed: 'nunber', //invalid type
-    bark: 'functions',
-});
-
-//successfully implement an interface
+    name: 'string',
+    age: 'number',
+    greet: 'function',
+}); 
+//successfully implement an interfac    e
 let sarah = personInterface.implement({
   name: 'sarah',
   age: 22,

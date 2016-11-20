@@ -13,9 +13,10 @@ function create(id, props) {
         .keys(props)
         .filter(propName => !validTypeDeclaration(props[propName]));
 
-    console.log('invalidProps', invalidProps);
-
-    if (invalidProps.length > 0) { /*throw new Error*/console.log(`${id}'s props have unknown types.\n Invalid props: ${invalidProps}`); return;}
+    let hasInvalidProps = (invalidProps.length > 0);
+    if (hasInvalidProps) { 
+        throw new Error(`${id}'s props have unknown types.\n Invalid props: ${invalidProps}`); 
+    }
 
     function implement(obj) {
         let newObj = {};
@@ -61,3 +62,7 @@ function create(id, props) {
         implement, 
     };
 }
+
+module.exports = {
+    create,
+};
