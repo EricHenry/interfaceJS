@@ -1,3 +1,5 @@
+const { invalidPropError, missingPropError, unknownTypesError, wrongTypeError } = require('./errors/_errors.js');
+
 const validTypeDeclaration = propType => {
     if (propType.includes('interface')) {
         return true;
@@ -15,7 +17,7 @@ function create(id, props) {
 
     let hasInvalidProps = (invalidProps.length > 0);
     if (hasInvalidProps) { 
-        throw new Error(`${id}'s props have unknown types.\n Invalid props: ${invalidProps}`); 
+        throw new unknownTypesError(id, invalidProps);
     }
 
     function implement(obj) {
@@ -23,33 +25,30 @@ function create(id, props) {
         let proto = {};
 
         Object.keys(obj)
-            .forEach((key) => { 
-                if (!props[key]) {
-                    throw new Error(`${key} is not defined in the interface`);
+            .forEach((prop) => { 
+                if (!props[prop]) {
+                    throw new invalidPropError(id, prop);
                 }
-                if (props[key] !== typeof obj[key]) {
-                    throw new Error(`property ${key} is the wrong type.`);
+                if (props[prop] !== typeof obj[prop]) {
+                    throw new wrongTypeError(id, prop);
                 }
                 
-                if (props[key] === 'function') {
-                    proto[key] = obj[key];
+                if (props[prop] === 'function') {
+                    proto[prop] = obj[prop];
                     return;
                 }
 
-                if (props[key] === 'interface') {
-
+                if (props[prop] === 'interface') {
+                    //todo
                 }
                 
-                newObj[key] = obj[key];
+                newObj[prop] = obj[prop];
             });
 
         Object.keys(props)
-            .forEach(key => {
-                let propertyIsDefined = Object.keys(obj).indexOf(key) >= 0;
-
-                if (propertyIsDefined) { return; }
-
-                throw new Error(`${key} needs to be defined to implement this interface`);
+            .forEach(prop => {
+                let propertyIsDefined = Object.keys(obj).indexOf(prop) >= 0;
+                if (!propertyIsDefined) { throw new missingPropError(id, prop); }
             });
 
         var toReturn = Object.assign(Object.create(proto), newObj);
