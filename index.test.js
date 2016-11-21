@@ -1,3 +1,4 @@
+const { invalidPropError, missingPropError, unknownTypesError, wrongTypeError } = require('./src/errors/_errors.js');
 const Interface = require('./src/index.js');
 
 describe('Creating a new interface', () => {
@@ -24,61 +25,67 @@ describe('Creating a new interface', () => {
                 bark: 'functions',
             })
         ))
-        .toThrow();
+        .toThrowError(unknownTypesError);
     });
 });
 
-let personInterface = Interface.create('person', {
-    name: 'string',
-    age: 'number',
-    greet: 'function',
-}); 
-//successfully implement an interfac    e
-let sarah = personInterface.implement({
-  name: 'sarah',
-  age: 22,
-  greet() { console.log(`hi my name is ${this.name}`); },
+describe('Implement an interface by creating an object', () => {
+    let personInterface;
+    beforeAll(() => {
+        personInterface = Interface.create('person', {
+            nickname: 'string',
+            age: 'number',
+            greet: 'function',
+        });    
+    });
+
+    it('should correctly create an object implementing the interface if all types and properties are passed', () =>{
+        expect(() => (
+            personInterface.implement({
+                nickname: 'Henry',
+                age: 22,
+                greet() { return `hi my name is ${this.name}`; },
+            })        
+        )).not.toThrow();
+    });
+
+    it('should add defined functions to the object\'s prototype', () => {
+        let brittany = personInterface.implement({
+            nickname: 'Brinny',
+            age: 25,
+            greet() { return `Howdy all! I'm ${this.name}`; },
+        });
+
+        expect(typeof brittany.__proto__.greet).toBe('function');
+    })
+
+    it('should throw an error if the wrong type is passed as the implementing object', () => {
+        expect(() => (
+            personInterface.implement({
+                nickname: 'Brinny',
+                age: '26',
+                greet() { return `Hi everyone, I'm ${this.name} and I'm ${this.age}`; },
+            })
+        )).toThrowError(wrongTypeError);
+    });
+
+    it('should throw an error if an interface\'s prop is not defined when implementing', () => {
+        expect(() => (
+            personInterface.implement({
+                nickname: 'Brinny',
+                greet() { return `Hi everyone, I'm ${this.name} and I'm ${this.age}`; },
+            })        
+        )).toThrowError(missingPropError);
+    });
+
+    it('should throw a custom error if trying to add a property that is not defined in the interface', () => {
+        expect(() => (
+            personInterface.implement({
+                nickname: 'Brinny',
+                age: 25,
+                id: 'S2324356',
+                greet() { return `Hi everyone, I'm ${this.name} and I'm ${this.age}`; },
+            })        
+        )).toThrowError(invalidPropError);
+    });    
 });
-
-// see the out put
-for (var key in sarah) {
-  console.log(`${key} -> ${sarah[key]}`);
-}
-// greet everyone!
-sarah.greet();
-
-//unsuccessfully implment, wrong type
-// wrap in try/catch to show that error is caught
-try {
-    let brittany = personInterface.implement({
-        name: 'Brittany',
-        age: '26',
-        greet() { console.log(`Hi, dummies I'm ${this.name} and I'm ${this.age}`)},
-    })
-} catch (e) {
-    console.log(`unsuccessful interface implementation \n error -> ${e.message}`)
-}
-
-//unsuccessfully implment, missing property
-// wrap in try/catch to show that error is caught
-try {
-    let brittany = personInterface.implement({
-        name: 'Brittany',
-        greet() { console.log(`Hi, dummies I'm ${this.name} and I'm ${this.age}`)},
-    })
-} catch (e) {
-    console.log(`unsuccessful interface implementation \n error -> ${e.message}`)
-}
-
-//unsuccessfully implment, including a property that is not defined in the interface
-// wrap in try/catch to show that error is caught
-try {
-    let brittany = personInterface.implement({
-        name: 'Brittany',
-        age: 25,
-        id: 'S2324356',
-        greet() { console.log(`Hi, dummies I'm ${this.name} and I'm ${this.age}`)},
-    })
-} catch (e) {
-    console.log(`unsuccessful interface implementation \n error -> ${e.message}`)
-}
