@@ -1,4 +1,4 @@
-![interfaceJS] (interfaceJS_logo.png)
+![interfaceJS] (.assests/interfaceJS_logo.png)
 
 A simple lightweight api to create, implement, and compose interfaces.
 
@@ -6,15 +6,15 @@ This is a work in progress. The API will probably change. Please be aware if you
 
 ## What is an interface?
 
-What does it mean to create an interface? Basically you are defining a contract. 
-That contract is between the interface's structure (the properties & types of those properties) 
-and an object you are creating. That contract guarantees that any object that you create of that 
-interface will have the same structure as the interface.  
+What does it mean to create an interface? Basically you are defining a contract.
+That contract is between the interface's structure (the properties & types of those properties)
+and an object you are creating. That contract guarantees that any object that you create of that
+interface will have the same structure as the interface.
 
 ## Why should I use this?
 
-This library is meant to provide a way to define and use interfaces natively without needing a 
-transpiler. With this library you can define these strict contracts. Building objects from these 
+This library is meant to provide a way to define and use interfaces natively without needing a
+transpiler. With this library you can define these strict contracts. Building objects from these
 contracts gives you error checking so you can guarantee that the structure of the object you are creating
 matches the interface you want to implement.
 
@@ -22,17 +22,17 @@ matches the interface you want to implement.
 
 ### `create()`
 
-To create an interface, provide the interface `create()` method with two arguments. 
+To create an interface, provide the interface `create()` method with two arguments.
 The first argument is the name of the interface, this should be a unique identifier among all interfaces.
-The second argument is an object that defines the interface. The keys are the names of the properties while 
+The second argument is an object that defines the interface. The keys are the names of the properties while
 the values are the types those properties should hold.
 
-`create()` will return an immutable (frozen) object. 
-Right now that object has an id (the passed interface name) 
+`create()` will return an immutable (frozen) object.
+Right now that object has an id (the passed interface name)
 and the properties defining that interface.
 
 ```JavaScript
-// creating an interface 
+// creating an interface
 const personInterface = Interface.create('person', {
     nickname: 'string', //nickname will be prop of the implementing object and its value has to be a string.
     age: 'number',
@@ -42,11 +42,11 @@ const personInterface = Interface.create('person', {
 
 ### `implement()`
 
-To implement an interface, provide the interface `implement()` method two arguments. 
-First is the interface that you want to implement. The second argument is the object 
+To implement an interface, provide the interface `implement()` method two arguments.
+First is the interface that you want to implement. The second argument is the object
 that you are creating.
 
-`implement()` will return a new object with the defined properties and values. 
+`implement()` will return a new object with the defined properties and values.
 any function will be put on the object's prototype. Before returning, this object will check
 against the interface to make sure the object being created matches the interface's structure.
 
@@ -64,8 +64,8 @@ TODO
 
 ## Pitfalls
 
-1. Because this a library and not a transpiler, errors when implementing an interface 
-will only be thrown at runtime. This is not as nice as having compile time errors. A possible 
+1. Because this a library and not a transpiler, errors when implementing an interface
+will only be thrown at runtime. This is not as nice as having compile time errors. A possible
 workaround would be to make an eslint plugin. (or some other work around)
 
 2. Right now the library only handles built in types. I would like to handle full function signatures
@@ -88,7 +88,7 @@ comings of this library.
 
 ## Contributing
 
-I encourage anyone to open an issue with a problem or suggestion. 
-Anyone may also submit a pull request with a fix/suggestion/or new feature. I will work to 
-fully flesh out the Contributing document as well as providing linting rules and a build process 
+I encourage anyone to open an issue with a problem or suggestion.
+Anyone may also submit a pull request with a fix/suggestion/or new feature. I will work to
+fully flesh out the Contributing document as well as providing linting rules and a build process
 for anyone who wished to contribute.

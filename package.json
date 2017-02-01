@@ -2,7 +2,7 @@
   "name": "interfacejs",
   "version": "0.0.1",
   "description": "Create, implement and compose interfaces without needing a transpiler.",
-  "main": "src/index.js",
+  "main": "dist/interface.js",
   "scripts": {
     "test": "jest"
   },
@@ -23,9 +23,19 @@
   },
   "homepage": "https://github.com/EricHenry/interfaceJS#readme",
   "devDependencies": {
-    "jest-cli": "^17.0.3"
+    "jest-cli": "^17.0.3",
+    "ts-jest": "^18.0.2"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
   }
 }
